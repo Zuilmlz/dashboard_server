@@ -13,16 +13,17 @@ const config = require('../config/config');
 
 
 async function testConnection() {
-    let pool
-  try {
-    pool = await sql.connect(config);
-    return console.log('Conexión exitosa a SQL Server');
-    
-  } catch (err) {
-    return console.error('Error al conectar a SQL Server:', err);
-  } finally {
-    
-  }
+    let pool;
+    try {
+      pool = await sql.connect(config);
+      console.log('Conexión exitosa a SQL Server');
+      return 'Conexión exitosa a SQL Server';  // Aquí retornas la cadena de texto
+    } catch (err) {
+      console.error('Error al conectar a SQL Server:', err);
+      return `Error al conectar a SQL Server: ${err.message}`;  // Aquí retornas el mensaje de error
+    } finally {
+      if (pool) await pool.close();  // Asegúrate de cerrar la conexión si se ha creado
+    }
 }
 
 // /**

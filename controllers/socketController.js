@@ -28,11 +28,14 @@ function configSocket(io) {
 
             try {
 
-                const result = await sqlService.testConnection();
-                console.log(result)
-                socket.emit('InformacionInicial', {
-                  result
-                });
+              const result = await sqlService.testConnection();
+
+              if (result) {
+                console.log(result);
+                socket.emit('InformacionInicial', { result });
+              } else {
+                console.error('No se pudo obtener un resultado de la conexión.');
+              }
 
 
                 // const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
