@@ -10,7 +10,7 @@
 require('dotenv').config();
 
 console.log(process.env.DB_SERVER)
-console.log(process.env.DB_DOMAIN,)
+console.log(process.env.DB_DOMAIN)
 
 const config = {
   
