@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/libs/dx21.2/css/dx.common.css">
+    <link rel="stylesheet" href="/libs/dx21.2/css/dx.light.compact.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <label class="lblTituloCard">Ajustes realizados en el periodo y año especificado.</label>
+        </div>
+        <div class="card-body">
+            <div class="col-md-8">
+                <div class="row divContadores">
+                    <div class="col-md-2 card_estadistica">
+                        <div class="numero-wrapper">
+                            <span class="numero-contador" id="txtAlumnos">0</span>
+                        </div>
+                        <div class="descripcion-wrapper">
+                            <span class="descripcion-contador">Total alumnos</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 card_estadistica">
+                        <div class="numero-wrapper">
+                            <span class="numero-contador" id="txtInscritos">0</span>
+                        </div>
+                        <div class="descripcion-wrapper">
+                            <span class="descripcion-contador">Inscritos</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 card_estadistica">
+                        <div class="numero-wrapper">
+                            <span class="numero-contador" id="txtInscritosFueraDeTiempo">0</span>
+                        </div>
+                        <div class="descripcion-wrapper">
+                            <span class="descripcion-contador">No inscritos en tiempo</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 card_estadistica">
+                        <div class="numero-wrapper">
+                            <span class="numero-contador" id="txtBloqueado">0</span>
+                        </div>
+                        <div class="descripcion-wrapper">
+                            <span class="descripcion-contador">Bloqueados</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 card_estadistica">
+                        <div class="numero-wrapper">
+                            <span class="numero-contador">23</span>
+                        </div>
+                        <div class="descripcion-wrapper">
+                            <span class="descripcion-contador">Por egresar</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 card_estadistica">
+                        <div class="numero-wrapper">
+                            <span class="numero-contador">1</span>
+                        </div>
+                        <div class="descripcion-wrapper">
+                            <span class="descripcion-contador">Grupos con diferencia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-md-12 mt-4">
+                <div class="row">
+                    <div class="col-md-5 mt-4">
+                        <div id="gridGrupos"></div>
+                    </div>
+                    <div class="col-md-7 mt-4">
+                        <div id="tabPanelTables"></div>
+                    </div>
+                </div>
+            </div>       
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- Scripts -->
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="/libs/dx21.2/js/jszip.js"></script>
+<script src="/libs/dx21.2/js/dx.all.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/dashboard.js"></script>

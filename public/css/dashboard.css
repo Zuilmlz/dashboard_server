@@ -1,0 +1,67 @@
+:root {
+    --color-blanco: #fff;
+    --color-negro: #000;
+    --color-ibero: #c8041a;
+    --color-verde: #229954;
+    --color-azul: #1F618D;
+    --color-amarillo: #f39c12;
+    --color-devextreme: rgba(191, 191, 191, 0.15);
+}
+
+.lblTituloCard{
+    color: var(--color-ibero);
+    font-weight: bold;
+}
+
+.card_estadistica:last-child {
+    margin-right:0;
+}
+
+.divContadores {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 5px;
+}
+
+.card_estadistica {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: var(--color-devextreme);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-right: 10px;
+    height: 150px;
+    text-align: center;
+    flex: 0 0 auto;
+    width: calc(16.6667% - 20px);
+}
+
+.descripcion-wrapper, .numero-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.descripcion-contador {
+    font-size: 10.5px;
+    font-weight: bold;
+}
+
+.numero-contador {
+    font-size: 35px;
+    font-weight: bold;
+    color: var(--color-amarillo);
+}
+
+@media (max-width: 768px) {
+    .card {
+        height: auto;
+    }
+    
+
+}
