@@ -24,7 +24,7 @@ function configSocket(io) {
         console.log('Cliente conectado:', socket.id);
 
         socket.on('depto', async (depto) => {
-
+            console.log(depto)
             const result = await sqlService.testConnection();
             console.log(result)
 
