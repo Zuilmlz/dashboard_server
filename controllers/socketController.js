@@ -27,22 +27,30 @@ function configSocket(io) {
             deptoSockets[socket.id] = depto;
 
             try {
-                const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
 
-                if (result && result[0]) {
-                    const jsonData = result[0];
-                    const grupos = jsonData.Grupos ? JSON.parse(jsonData.Grupos) : [];
-                    const alumnos = jsonData.Alumnos ? JSON.parse(jsonData.Alumnos) : [];
-                    const inscritos = jsonData.Inscritos ? JSON.parse(jsonData.Inscritos) : [];
-                    const totales = jsonData.Totales ? JSON.parse(jsonData.Totales) : [];
+                const result = await sqlService.testConnection();
+                console.log(result)
+                socket.emit('InformacionInicial', {
+                  result
+                });
 
-                    socket.emit('InformacionInicial', {
-                        grupos,
-                        alumnos,
-                        inscritos,
-                        totales
-                    });
-                }
+
+                // const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
+
+                // if (result && result[0]) {
+                //     const jsonData = result[0];
+                //     const grupos = jsonData.Grupos ? JSON.parse(jsonData.Grupos) : [];
+                //     const alumnos = jsonData.Alumnos ? JSON.parse(jsonData.Alumnos) : [];
+                //     const inscritos = jsonData.Inscritos ? JSON.parse(jsonData.Inscritos) : [];
+                //     const totales = jsonData.Totales ? JSON.parse(jsonData.Totales) : [];
+
+                //     socket.emit('InformacionInicial', {
+                //         grupos,
+                //         alumnos,
+                //         inscritos,
+                //         totales
+                //     });
+                // }
             } catch (err) {
                 console.error('Error al cargar los datos iniciales:', err);
             }
@@ -59,48 +67,48 @@ function configSocket(io) {
   });
 
 
-  /**
-   * Escucha mensajes de una cola de servicio y emite eventos personalizados cuando se reciben mensajes.
-   * @param {string} queueName - Nombre de la cola de la cual se recibirán los mensajes.
-   * @param {string} eventName - Nombre del evento personalizado que se emitirá con el contenido del mensaje.
-   * @returns {void}
-  */
-  async function listenForMessages(queueName, eventName) {
-    try {
-      const messages = await sqlService.receiveMessages(queueName);
+  // /**
+  //  * Escucha mensajes de una cola de servicio y emite eventos personalizados cuando se reciben mensajes.
+  //  * @param {string} queueName - Nombre de la cola de la cual se recibirán los mensajes.
+  //  * @param {string} eventName - Nombre del evento personalizado que se emitirá con el contenido del mensaje.
+  //  * @returns {void}
+  // */
+  // async function listenForMessages(queueName, eventName) {
+  //   try {
+  //     const messages = await sqlService.receiveMessages(queueName);
 
-      if (messages.length > 0) {
-        messages.forEach((msg) => {
-          // Emitir un evento personalizado según la cola
-          notificationEmitter.emit(eventName, msg.message_body);
-        });
-      }
+  //     if (messages.length > 0) {
+  //       messages.forEach((msg) => {
+  //         // Emitir un evento personalizado según la cola
+  //         notificationEmitter.emit(eventName, msg.message_body);
+  //       });
+  //     }
 
-      // Seguir escuchando mensajes
-      setImmediate(() => listenForMessages(queueName, eventName));
-    } catch (err) {
-      console.error(`Error al recibir mensajes de la cola ${queueName}:`, err);
-      setImmediate(() => listenForMessages(queueName, eventName));
-    }
-  }
+  //     // Seguir escuchando mensajes
+  //     setImmediate(() => listenForMessages(queueName, eventName));
+  //   } catch (err) {
+  //     console.error(`Error al recibir mensajes de la cola ${queueName}:`, err);
+  //     setImmediate(() => listenForMessages(queueName, eventName));
+  //   }
+  // }
 
-  // Escuchar eventos y emitirlos a través de los socketS.
-  notificationEmitter.on('nuevoRegistroGrupo', (message) => {
-    io.emit('NotificacionRegistroGrupo', { message });
-  });
+  // // Escuchar eventos y emitirlos a través de los socketS.
+  // notificationEmitter.on('nuevoRegistroGrupo', (message) => {
+  //   io.emit('NotificacionRegistroGrupo', { message });
+  // });
 
-  notificationEmitter.on('nuevoRegistroAlumno', (message) => {
-    io.emit('NotificacionRegistroAlumno', { message });
-  });
+  // notificationEmitter.on('nuevoRegistroAlumno', (message) => {
+  //   io.emit('NotificacionRegistroAlumno', { message });
+  // });
 
-  notificationEmitter.on('nuevoRegistroInscrito', (message) => {
-    io.emit('NotificacionRegistroInscrito', { message });
-  });
+  // notificationEmitter.on('nuevoRegistroInscrito', (message) => {
+  //   io.emit('NotificacionRegistroInscrito', { message });
+  // });
 
-  // Escuchar mensajes de diferentes colas
-  listenForMessages('InsertGrupoQueue', 'nuevoRegistroGrupo');
-  listenForMessages('InsertAlumnoQueue', 'nuevoRegistroAlumno');
-  listenForMessages('InsertInscritoQueue', 'nuevoRegistroInscrito');
+  // // Escuchar mensajes de diferentes colas
+  // listenForMessages('InsertGrupoQueue', 'nuevoRegistroGrupo');
+  // listenForMessages('InsertAlumnoQueue', 'nuevoRegistroAlumno');
+  // listenForMessages('InsertInscritoQueue', 'nuevoRegistroInscrito');
 
 }
 
