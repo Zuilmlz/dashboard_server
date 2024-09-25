@@ -14,7 +14,6 @@ console.log('ENTRO AL CONFIG')
 const config = {
   
   server: process.env.DB_SERVER,
-  port: 1433,
   authentication: {
     type: "ntlm",
     options: {
@@ -29,6 +28,7 @@ const config = {
     trustServerCertificate: true,
     connectionTimeout: 120000, // Timeout de conexión en milisegundos (30 segundos)
     requestTimeout: 120000, // Timeout de solicitudes en milisegundos (30 segundos)
+    port: 1433
   },
 };
 
