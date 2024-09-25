@@ -1,93 +1,93 @@
-/*
-    -- Author:	Luis Melendez
-    -- Create date: 22/08/2024
-    -- Update date: 
-    -- Description:	
-    -- Update:      
+// /*
+//     -- Author:	Luis Melendez
+//     -- Create date: 22/08/2024
+//     -- Update date: 
+//     -- Description:	
+//     -- Update:      
                     
-*/
+// */
 
 
-const sql = require('mssql');
-const config = require('../config/config');
+// const sql = require('mssql');
+// const config = require('../config/config');
 
-/**
- * Ejecuta un procedimiento almacenado en SQL Server con los parámetros de entrada proporcionados.
- * @param {string} procedureName - Nombre del procedimiento almacenado a ejecutar.
- * @param {Object} [inputParameters] - Objeto con los parámetros de entrada para el procedimiento almacenado.
- * @returns {Promise<Array>} - Devuelve una promesa que resuelve a un arreglo con los registros del resultado del procedimiento.
- * @throws {Error} - Lanza un error si ocurre algún problema durante la ejecución del procedimiento almacenado.
- */
-async function executeStoredProcedure(procedureName, inputParameters) {
-  try {
-    let pool = await sql.connect(config);
-    let request = pool.request();
+// /**
+//  * Ejecuta un procedimiento almacenado en SQL Server con los parámetros de entrada proporcionados.
+//  * @param {string} procedureName - Nombre del procedimiento almacenado a ejecutar.
+//  * @param {Object} [inputParameters] - Objeto con los parámetros de entrada para el procedimiento almacenado.
+//  * @returns {Promise<Array>} - Devuelve una promesa que resuelve a un arreglo con los registros del resultado del procedimiento.
+//  * @throws {Error} - Lanza un error si ocurre algún problema durante la ejecución del procedimiento almacenado.
+//  */
+// async function executeStoredProcedure(procedureName, inputParameters) {
+//   try {
+//     let pool = await sql.connect(config);
+//     let request = pool.request();
 
-    // Agregar parámetros al request
-    if (inputParameters) {
-      for (const [paramName, paramValue] of Object.entries(inputParameters)) {
-        request.input(paramName, sql.NVarChar, paramValue); // Asegúrate de ajustar el tipo de dato si es necesario
-      }
-    }
+//     // Agregar parámetros al request
+//     if (inputParameters) {
+//       for (const [paramName, paramValue] of Object.entries(inputParameters)) {
+//         request.input(paramName, sql.NVarChar, paramValue); // Asegúrate de ajustar el tipo de dato si es necesario
+//       }
+//     }
 
-    let result = await request.execute(procedureName);
+//     let result = await request.execute(procedureName);
 
-    console.log(`Procedimiento ${procedureName} ejecutado correctamente`);
-    return result.recordset;
-  } catch (err) {
-    console.error('Error al ejecutar el procedimiento almacenado:', err);
-    throw err;
-  } finally {
+//     console.log(`Procedimiento ${procedureName} ejecutado correctamente`);
+//     return result.recordset;
+//   } catch (err) {
+//     console.error('Error al ejecutar el procedimiento almacenado:', err);
+//     throw err;
+//   } finally {
     
-  }
-}
+//   }
+// }
 
-/**
- * Recibe mensajes de una cola de servicio en SQL Server.
- * @param {string} queueName - Nombre de la cola desde la cual se recibirán los mensajes.
- * @returns {Promise<Array>} - Devuelve una promesa que resuelve a un arreglo de mensajes recibidos.
- * @throws {Error} - Lanza un error si ocurre algún problema durante la recepción de mensajes.
- */
-async function receiveMessages(queueName) {
-  let pool;
-  try {
-    // Conectar al pool de conexiones
-    pool = await sql.connect(config);
-    let request = pool.request();
+// /**
+//  * Recibe mensajes de una cola de servicio en SQL Server.
+//  * @param {string} queueName - Nombre de la cola desde la cual se recibirán los mensajes.
+//  * @returns {Promise<Array>} - Devuelve una promesa que resuelve a un arreglo de mensajes recibidos.
+//  * @throws {Error} - Lanza un error si ocurre algún problema durante la recepción de mensajes.
+//  */
+// async function receiveMessages(queueName) {
+//   let pool;
+//   try {
+//     // Conectar al pool de conexiones
+//     pool = await sql.connect(config);
+//     let request = pool.request();
 
-    // Recibir mensajes de la cola específica
-    const result = await request.query(`RECEIVE TOP (1) conversation_handle, message_body FROM ${queueName};`);
+//     // Recibir mensajes de la cola específica
+//     const result = await request.query(`RECEIVE TOP (1) conversation_handle, message_body FROM ${queueName};`);
 
-    if (result.recordset.length > 0) {
-      // Procesar los mensajes
-      const messages = result.recordset.map(row => {
-        const messageString = row.message_body.toString('utf-16le');
-        const messageJson = JSON.parse(messageString);
-        return {
-          conversation_handle: row.conversation_handle,
-          message_body: messageJson
-        };
-      });
+//     if (result.recordset.length > 0) {
+//       // Procesar los mensajes
+//       const messages = result.recordset.map(row => {
+//         const messageString = row.message_body.toString('utf-16le');
+//         const messageJson = JSON.parse(messageString);
+//         return {
+//           conversation_handle: row.conversation_handle,
+//           message_body: messageJson
+//         };
+//       });
 
-      for (const msg of messages) {
-        await request.query(`END CONVERSATION '${msg.conversation_handle}';`);
-      }
+//       for (const msg of messages) {
+//         await request.query(`END CONVERSATION '${msg.conversation_handle}';`);
+//       }
 
-      return messages;
-    }
+//       return messages;
+//     }
 
-    return [];
-  } catch (err) {
-    console.error(`Error al recibir mensajes de ${queueName}:`, err);
-    throw err;
-  } finally {
-    if (pool) {
-      pool.close();
-    }
-  }
-}
+//     return [];
+//   } catch (err) {
+//     console.error(`Error al recibir mensajes de ${queueName}:`, err);
+//     throw err;
+//   } finally {
+//     if (pool) {
+//       pool.close();
+//     }
+//   }
+// }
 
-module.exports = {
-  executeStoredProcedure,
-  receiveMessages
-};
+// module.exports = {
+//   executeStoredProcedure,
+//   receiveMessages
+// };

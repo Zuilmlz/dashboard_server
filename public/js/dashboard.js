@@ -172,201 +172,201 @@ $(function() {
             confirmButtonText: 'Aceptar'
         });
     } else {
-        socket.emit('depto', depto);
+        // socket.emit('depto', depto);
 
-        socket.on('InformacionInicial', (data) => {
-            // Datos para cada tabla
-            const dataG = data.grupos || [];
-            const dataA = data.alumnos || [];
-            const dataI = data.inscritos || [];
-            const dataT = data.totales || [];
+        // socket.on('InformacionInicial', (data) => {
+        //     // Datos para cada tabla
+        //     const dataG = data.grupos || [];
+        //     const dataA = data.alumnos || [];
+        //     const dataI = data.inscritos || [];
+        //     const dataT = data.totales || [];
         
-            $('#txtAlumnos').text(dataT[0].TotalAlumno)
-            $('#txtInscritos').text(dataT[0].TotalInscrito)
-            $('#txtInscritosFueraDeTiempo').text(dataT[0].TotalInscritoFueraTiempo)
-            $('#txtBloqueado').text(dataT[0].TotalBloqueado)
+        //     $('#txtAlumnos').text(dataT[0].TotalAlumno)
+        //     $('#txtInscritos').text(dataT[0].TotalInscrito)
+        //     $('#txtInscritosFueraDeTiempo').text(dataT[0].TotalInscritoFueraTiempo)
+        //     $('#txtBloqueado').text(dataT[0].TotalBloqueado)
 
-            if (dataG.length > 0) {
-                // Procesar y ajustar columnas para gridGrupos
-                const columnasExistentes = gridGrupos.option("columns") || [];
-                const todasLasColumnasGrupos = new Set();
+        //     if (dataG.length > 0) {
+        //         // Procesar y ajustar columnas para gridGrupos
+        //         const columnasExistentes = gridGrupos.option("columns") || [];
+        //         const todasLasColumnasGrupos = new Set();
             
-                const dataAjustada = dataG.map(registro => {
-                    const grupos = JSON.parse(registro.JsonGrupos || '[]');
+        //         const dataAjustada = dataG.map(registro => {
+        //             const grupos = JSON.parse(registro.JsonGrupos || '[]');
                     
-                    const filaAjustada = { 
-                        ...registro 
-                    };
+        //             const filaAjustada = { 
+        //                 ...registro 
+        //             };
             
-                    grupos.forEach(grupoData => {
-                        const grupoKey = grupoData.grupo;
-                        todasLasColumnasGrupos.add(grupoKey); 
-                        filaAjustada[grupoKey] = HtmlDivFormat(grupoData.cupo,grupoData.horario,grupoData.profesor);
-                    });
+        //             grupos.forEach(grupoData => {
+        //                 const grupoKey = grupoData.grupo;
+        //                 todasLasColumnasGrupos.add(grupoKey); 
+        //                 filaAjustada[grupoKey] = HtmlDivFormat(grupoData.cupo,grupoData.horario,grupoData.profesor);
+        //             });
             
-                    return filaAjustada;
-                });
+        //             return filaAjustada;
+        //         });
             
-                const nuevasColumnasGrupos = Array.from(todasLasColumnasGrupos).filter(grupo =>
-                    !columnasExistentes.some(col => col.dataField === grupo)
-                ).map(grupo => ({
-                    dataField: grupo,
-                    caption: grupo,
-                    cellTemplate: function (container, options) {
-                        $(container).html(options.value);
-                    }
-                }));
+        //         const nuevasColumnasGrupos = Array.from(todasLasColumnasGrupos).filter(grupo =>
+        //             !columnasExistentes.some(col => col.dataField === grupo)
+        //         ).map(grupo => ({
+        //             dataField: grupo,
+        //             caption: grupo,
+        //             cellTemplate: function (container, options) {
+        //                 $(container).html(options.value);
+        //             }
+        //         }));
             
-                if (nuevasColumnasGrupos.length > 0) {
-                    gridGrupos.option("columns", [...columnasExistentes, ...nuevasColumnasGrupos]);
-                }
+        //         if (nuevasColumnasGrupos.length > 0) {
+        //             gridGrupos.option("columns", [...columnasExistentes, ...nuevasColumnasGrupos]);
+        //         }
             
-                gridGrupos.option("dataSource", dataAjustada);
-            }
+        //         gridGrupos.option("dataSource", dataAjustada);
+        //     }
             
 
-            if(dataA.length > 0){
-                gridAlumnos.option("dataSource", dataA);
-            }
+        //     if(dataA.length > 0){
+        //         gridAlumnos.option("dataSource", dataA);
+        //     }
 
-            if(dataI.length > 0){
-                gridInscritos.option("dataSource", dataI);
-            }
-        });
+        //     if(dataI.length > 0){
+        //         gridInscritos.option("dataSource", dataI);
+        //     }
+        // });
 
-        socket.on('NotificacionRegistroGrupo', (data) => {
+        // socket.on('NotificacionRegistroGrupo', (data) => {
         
-        var registro = data.message;
+        // var registro = data.message;
 
-        if(registro[0].Departamento == depto){
-            const dataSource = gridGrupos.option("dataSource") || [];
-            const grupos = JSON.parse(registro[0].JsonGrupos || '[]');  // Asegurarse de que sea un array
+        // if(registro[0].Departamento == depto){
+        //     const dataSource = gridGrupos.option("dataSource") || [];
+        //     const grupos = JSON.parse(registro[0].JsonGrupos || '[]');  // Asegurarse de que sea un array
 
 
-            const updatedRow = {
-                ...registro[0]
-            };
+        //     const updatedRow = {
+        //         ...registro[0]
+        //     };
 
-            grupos.forEach(grupoData => {
-                const grupoKey = grupoData.grupo;
-                updatedRow[grupoKey] = HtmlDivFormat(grupoData.cupo, grupoData.horario, grupoData.profesor);
-            });
+        //     grupos.forEach(grupoData => {
+        //         const grupoKey = grupoData.grupo;
+        //         updatedRow[grupoKey] = HtmlDivFormat(grupoData.cupo, grupoData.horario, grupoData.profesor);
+        //     });
 
-            const existingIndex = dataSource.findIndex(item => item.IdReg === registro[0].IdReg);
-            if (existingIndex !== -1) {
-                dataSource[existingIndex] = updatedRow;
-            } else {
-                dataSource.push(updatedRow);
-            }
+        //     const existingIndex = dataSource.findIndex(item => item.IdReg === registro[0].IdReg);
+        //     if (existingIndex !== -1) {
+        //         dataSource[existingIndex] = updatedRow;
+        //     } else {
+        //         dataSource.push(updatedRow);
+        //     }
 
-            const columnasExistentes = gridGrupos.option("columns") || [];
-            const todasLasColumnasGrupos = new Set(grupos.map(grupoData => grupoData.grupo));
+        //     const columnasExistentes = gridGrupos.option("columns") || [];
+        //     const todasLasColumnasGrupos = new Set(grupos.map(grupoData => grupoData.grupo));
 
-            const nuevasColumnasGrupos = Array.from(todasLasColumnasGrupos).filter(grupo =>
-                !columnasExistentes.some(col => col.dataField === grupo)
-            ).map(grupo => ({
-                dataField: grupo,
-                caption: grupo,
-                cellTemplate: function (container, options) {
-                    $(container).html(options.value); 
-                }
-            }));
+        //     const nuevasColumnasGrupos = Array.from(todasLasColumnasGrupos).filter(grupo =>
+        //         !columnasExistentes.some(col => col.dataField === grupo)
+        //     ).map(grupo => ({
+        //         dataField: grupo,
+        //         caption: grupo,
+        //         cellTemplate: function (container, options) {
+        //             $(container).html(options.value); 
+        //         }
+        //     }));
 
-            if (nuevasColumnasGrupos.length > 0) {
-                gridGrupos.option("columns", [...columnasExistentes, ...nuevasColumnasGrupos]);
-            }
+        //     if (nuevasColumnasGrupos.length > 0) {
+        //         gridGrupos.option("columns", [...columnasExistentes, ...nuevasColumnasGrupos]);
+        //     }
 
-            gridGrupos.option("dataSource", dataSource);
-        }
+        //     gridGrupos.option("dataSource", dataSource);
+        // }
 
-        });
+        // });
 
-        socket.on('NotificacionRegistroAlumno', (data) => {
-        // Datos para cada tabla
-        var registro = data.message
+        // socket.on('NotificacionRegistroAlumno', (data) => {
+        // // Datos para cada tabla
+        // var registro = data.message
 
-        if(registro[0].Departamento == depto){
-            try {
-                const dataSource = gridAlumnos.option("dataSource") || [];
+        // if(registro[0].Departamento == depto){
+        //     try {
+        //         const dataSource = gridAlumnos.option("dataSource") || [];
     
-                $('#txtAlumnos').text(registro[0].CountTotal)
+        //         $('#txtAlumnos').text(registro[0].CountTotal)
 
-                const updatedRow = {
-                    Cuenta: registro[0].Cuenta,
-                    Nombre: registro[0].Nombre,
-                    Carrera: registro[0].Carrera,
-                    Creditos: registro[0].Creditos,
-                    CreditosInscritos: registro[0].CreditosInscritos,
-                    Horario: registro[0].Horario,
-                    MateriasInscritas: registro[0].MateriasInscritas,
-                    EnTiempo: registro[0].EnTiempo,
-                    Bloqueos: registro[0].Bloqueos,
-                    Correo: registro[0].Correo,
-                };
+        //         const updatedRow = {
+        //             Cuenta: registro[0].Cuenta,
+        //             Nombre: registro[0].Nombre,
+        //             Carrera: registro[0].Carrera,
+        //             Creditos: registro[0].Creditos,
+        //             CreditosInscritos: registro[0].CreditosInscritos,
+        //             Horario: registro[0].Horario,
+        //             MateriasInscritas: registro[0].MateriasInscritas,
+        //             EnTiempo: registro[0].EnTiempo,
+        //             Bloqueos: registro[0].Bloqueos,
+        //             Correo: registro[0].Correo,
+        //         };
     
-                const existingIndex = dataSource.findIndex(item => item.IdReg === registro[0].IdReg);
-                if (existingIndex !== -1) {
-                    dataSource[existingIndex] = updatedRow;
-                } else {
-                    dataSource.push(updatedRow);
-                }
+        //         const existingIndex = dataSource.findIndex(item => item.IdReg === registro[0].IdReg);
+        //         if (existingIndex !== -1) {
+        //             dataSource[existingIndex] = updatedRow;
+        //         } else {
+        //             dataSource.push(updatedRow);
+        //         }
     
-                gridAlumnos.option('dataSource', dataSource);
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Socket',
-                    text: `Error al procesar la informacion del socket alumnos: ${error.message}`,
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        }
+        //         gridAlumnos.option('dataSource', dataSource);
+        //     } catch (error) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Socket',
+        //             text: `Error al procesar la informacion del socket alumnos: ${error.message}`,
+        //             confirmButtonText: 'Aceptar'
+        //         });
+        //     }
+        // }
 
 
-        });
+        // });
 
-        socket.on('NotificacionRegistroInscrito', (data) => {
-        // Datos para cada tabla
-        var registro = data.message
+        // socket.on('NotificacionRegistroInscrito', (data) => {
+        // // Datos para cada tabla
+        // var registro = data.message
 
-        if(registro[0].Departamento == depto){
-            try {
-                const dataSource = gridInscritos.option("dataSource") || [];
+        // if(registro[0].Departamento == depto){
+        //     try {
+        //         const dataSource = gridInscritos.option("dataSource") || [];
     
-                $('#txtInscritos').text(registro[0].CountTotal)
+        //         $('#txtInscritos').text(registro[0].CountTotal)
     
-                const updatedRow = {
-                    Cuenta: registro[0].Cuenta,
-                    Nombre: registro[0].Nombre,
-                    Carrera: registro[0].Carrera,
-                    Creditos: registro[0].Creditos,
-                    CreditosInscritos: registro[0].CreditosInscritos,
-                    Horario: registro[0].Horario,
-                    MateriasInscritas: registro[0].MateriasInscritas,
-                    EnTiempo: registro[0].EnTiempo,
-                    Bloqueos: registro[0].Bloqueos,
-                    Correo: registro[0].Correo,
-                };
+        //         const updatedRow = {
+        //             Cuenta: registro[0].Cuenta,
+        //             Nombre: registro[0].Nombre,
+        //             Carrera: registro[0].Carrera,
+        //             Creditos: registro[0].Creditos,
+        //             CreditosInscritos: registro[0].CreditosInscritos,
+        //             Horario: registro[0].Horario,
+        //             MateriasInscritas: registro[0].MateriasInscritas,
+        //             EnTiempo: registro[0].EnTiempo,
+        //             Bloqueos: registro[0].Bloqueos,
+        //             Correo: registro[0].Correo,
+        //         };
     
-                const existingIndex = dataSource.findIndex(item => item.IdReg === registro[0].IdReg);
-                if (existingIndex !== -1) {
-                    dataSource[existingIndex] = updatedRow;
-                } else {
-                    dataSource.push(updatedRow);
-                }
+        //         const existingIndex = dataSource.findIndex(item => item.IdReg === registro[0].IdReg);
+        //         if (existingIndex !== -1) {
+        //             dataSource[existingIndex] = updatedRow;
+        //         } else {
+        //             dataSource.push(updatedRow);
+        //         }
     
-                gridInscritos.option('dataSource', dataSource);
-            } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Socket',
-                    text: `Error al procesar la informacion del socket inscritos: ${error.message}`,
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-        }
+        //         gridInscritos.option('dataSource', dataSource);
+        //     } catch (error) {
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Socket',
+        //             text: `Error al procesar la informacion del socket inscritos: ${error.message}`,
+        //             confirmButtonText: 'Aceptar'
+        //         });
+        //     }
+        // }
         
-        });
+        // });
 
 
     }
