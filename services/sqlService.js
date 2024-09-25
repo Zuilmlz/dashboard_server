@@ -8,8 +8,19 @@
 // */
 
 
-// const sql = require('mssql');
-// const config = require('../config/config');
+const sql = require('mssql');
+const config = require('../config/config');
+
+
+async function testConnection() {
+  try {
+    let pool = await sql.connect(config);
+    console.log('Conexión exitosa a SQL Server');
+    await pool.close();
+  } catch (err) {
+    console.error('Error al conectar a SQL Server:', err);
+  }
+}
 
 // /**
 //  * Ejecuta un procedimiento almacenado en SQL Server con los parámetros de entrada proporcionados.
@@ -87,7 +98,8 @@
 //   }
 // }
 
-// module.exports = {
+module.exports = {
+    testConnection
 //   executeStoredProcedure,
 //   receiveMessages
-// };
+};

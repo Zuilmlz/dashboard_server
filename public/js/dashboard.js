@@ -174,65 +174,66 @@ $(function() {
     } else {
         socket.emit('depto', depto);
 
-        // socket.on('InformacionInicial', (data) => {
-        //     // Datos para cada tabla
-        //     const dataG = data.grupos || [];
-        //     const dataA = data.alumnos || [];
-        //     const dataI = data.inscritos || [];
-        //     const dataT = data.totales || [];
+        socket.on('InformacionInicial', (data) => {
+            console.log(data.result)
+            // Datos para cada tabla
+            // const dataG = data.grupos || [];
+            // const dataA = data.alumnos || [];
+            // const dataI = data.inscritos || [];
+            // const dataT = data.totales || [];
         
-        //     $('#txtAlumnos').text(dataT[0].TotalAlumno)
-        //     $('#txtInscritos').text(dataT[0].TotalInscrito)
-        //     $('#txtInscritosFueraDeTiempo').text(dataT[0].TotalInscritoFueraTiempo)
-        //     $('#txtBloqueado').text(dataT[0].TotalBloqueado)
+            // $('#txtAlumnos').text(dataT[0].TotalAlumno)
+            // $('#txtInscritos').text(dataT[0].TotalInscrito)
+            // $('#txtInscritosFueraDeTiempo').text(dataT[0].TotalInscritoFueraTiempo)
+            // $('#txtBloqueado').text(dataT[0].TotalBloqueado)
 
-        //     if (dataG.length > 0) {
-        //         // Procesar y ajustar columnas para gridGrupos
-        //         const columnasExistentes = gridGrupos.option("columns") || [];
-        //         const todasLasColumnasGrupos = new Set();
+            // if (dataG.length > 0) {
+            //     // Procesar y ajustar columnas para gridGrupos
+            //     const columnasExistentes = gridGrupos.option("columns") || [];
+            //     const todasLasColumnasGrupos = new Set();
             
-        //         const dataAjustada = dataG.map(registro => {
-        //             const grupos = JSON.parse(registro.JsonGrupos || '[]');
+            //     const dataAjustada = dataG.map(registro => {
+            //         const grupos = JSON.parse(registro.JsonGrupos || '[]');
                     
-        //             const filaAjustada = { 
-        //                 ...registro 
-        //             };
+            //         const filaAjustada = { 
+            //             ...registro 
+            //         };
             
-        //             grupos.forEach(grupoData => {
-        //                 const grupoKey = grupoData.grupo;
-        //                 todasLasColumnasGrupos.add(grupoKey); 
-        //                 filaAjustada[grupoKey] = HtmlDivFormat(grupoData.cupo,grupoData.horario,grupoData.profesor);
-        //             });
+            //         grupos.forEach(grupoData => {
+            //             const grupoKey = grupoData.grupo;
+            //             todasLasColumnasGrupos.add(grupoKey); 
+            //             filaAjustada[grupoKey] = HtmlDivFormat(grupoData.cupo,grupoData.horario,grupoData.profesor);
+            //         });
             
-        //             return filaAjustada;
-        //         });
+            //         return filaAjustada;
+            //     });
             
-        //         const nuevasColumnasGrupos = Array.from(todasLasColumnasGrupos).filter(grupo =>
-        //             !columnasExistentes.some(col => col.dataField === grupo)
-        //         ).map(grupo => ({
-        //             dataField: grupo,
-        //             caption: grupo,
-        //             cellTemplate: function (container, options) {
-        //                 $(container).html(options.value);
-        //             }
-        //         }));
+            //     const nuevasColumnasGrupos = Array.from(todasLasColumnasGrupos).filter(grupo =>
+            //         !columnasExistentes.some(col => col.dataField === grupo)
+            //     ).map(grupo => ({
+            //         dataField: grupo,
+            //         caption: grupo,
+            //         cellTemplate: function (container, options) {
+            //             $(container).html(options.value);
+            //         }
+            //     }));
             
-        //         if (nuevasColumnasGrupos.length > 0) {
-        //             gridGrupos.option("columns", [...columnasExistentes, ...nuevasColumnasGrupos]);
-        //         }
+            //     if (nuevasColumnasGrupos.length > 0) {
+            //         gridGrupos.option("columns", [...columnasExistentes, ...nuevasColumnasGrupos]);
+            //     }
             
-        //         gridGrupos.option("dataSource", dataAjustada);
-        //     }
+            //     gridGrupos.option("dataSource", dataAjustada);
+            // }
             
 
-        //     if(dataA.length > 0){
-        //         gridAlumnos.option("dataSource", dataA);
-        //     }
+            // if(dataA.length > 0){
+            //     gridAlumnos.option("dataSource", dataA);
+            // }
 
-        //     if(dataI.length > 0){
-        //         gridInscritos.option("dataSource", dataI);
-        //     }
-        // });
+            // if(dataI.length > 0){
+            //     gridInscritos.option("dataSource", dataI);
+            // }
+        });
 
         // socket.on('NotificacionRegistroGrupo', (data) => {
         

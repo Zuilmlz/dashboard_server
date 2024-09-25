@@ -7,12 +7,11 @@
                     
 // */
 
-const test = require('../config/config');
 
 
-// const sqlService = require('../services/sqlService');
-// const EventEmitter = require('events');
-// const notificationEmitter = new EventEmitter();
+const sqlService = require('../services/sqlService');
+const EventEmitter = require('events');
+const notificationEmitter = new EventEmitter();
 
 // const deptoSockets = {};
 // const ultimoDeptoId = {};
@@ -26,42 +25,45 @@ function configSocket(io) {
 
         socket.on('depto', async (depto) => {
 
-            const result = await test.testConnection();
+            const result = await sqlService.testConnection();
             console.log(result)
 
-        //     console.log('Departamento recibido:', depto);
-        //     deptoSockets[socket.id] = depto;
+            console.log('Departamento recibido:', depto);
+            deptoSockets[socket.id] = depto;
 
-        //     try {
-        //         const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
+            try {
+                socket.emit('InformacionInicial', {
+                    result
+                });
+                // const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
 
-        //         if (result && result[0]) {
-        //             const jsonData = result[0];
-        //             const grupos = jsonData.Grupos ? JSON.parse(jsonData.Grupos) : [];
-        //             const alumnos = jsonData.Alumnos ? JSON.parse(jsonData.Alumnos) : [];
-        //             const inscritos = jsonData.Inscritos ? JSON.parse(jsonData.Inscritos) : [];
-        //             const totales = jsonData.Totales ? JSON.parse(jsonData.Totales) : [];
+                // if (result && result[0]) {
+                //     const jsonData = result[0];
+                //     const grupos = jsonData.Grupos ? JSON.parse(jsonData.Grupos) : [];
+                //     const alumnos = jsonData.Alumnos ? JSON.parse(jsonData.Alumnos) : [];
+                //     const inscritos = jsonData.Inscritos ? JSON.parse(jsonData.Inscritos) : [];
+                //     const totales = jsonData.Totales ? JSON.parse(jsonData.Totales) : [];
 
-        //             socket.emit('InformacionInicial', {
-        //                 grupos,
-        //                 alumnos,
-        //                 inscritos,
-        //                 totales
-        //             });
-        //         }
-        //     } catch (err) {
-        //         console.error('Error al cargar los datos iniciales:', err);
-        //     }
+                //     socket.emit('InformacionInicial', {
+                //         grupos,
+                //         alumnos,
+                //         inscritos,
+                //         totales
+                //     });
+                // }
+            } catch (err) {
+                console.error('Error al cargar los datos iniciales:', err);
+            }
 
-        //     ultimoDeptoId[depto] = 0;
-        //     ultimoAlumnoId[depto] = 0;
-        //     ultimoInscritoId[depto] = 0;
+            ultimoDeptoId[depto] = 0;
+            ultimoAlumnoId[depto] = 0;
+            ultimoInscritoId[depto] = 0;
         });
 
-        // socket.on('disconnect', () => {
-        //     console.log('Cliente desconectado:', socket.id);
-        //     delete deptoSockets[socket.id];
-        // });
+        socket.on('disconnect', () => {
+            console.log('Cliente desconectado:', socket.id);
+            delete deptoSockets[socket.id];
+        });
   });
 
 
