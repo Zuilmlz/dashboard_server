@@ -9,6 +9,9 @@
 
 require('dotenv').config();
 
+console.log(process.env.DB_SERVER)
+console.log(process.env.DB_DOMAIN,)
+
 const config = {
   
   server: process.env.DB_SERVER,
