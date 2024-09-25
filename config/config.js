@@ -9,6 +9,7 @@
 
 require('dotenv').config();
 
+console.log('ENTRO AL CONFIG')
 console.log(process.env.DB_SERVER)
 console.log(process.env.DB_DOMAIN)
 
@@ -25,7 +26,7 @@ const config = {
   },
   options: {
     database: process.env.DB_NAME,
-    encrypt: false,
+    encrypt: true,
     trustServerCertificate: true,
   },
 };

@@ -1,11 +1,11 @@
-// /*
-//     -- Author:	Luis Melendez
-//     -- Create date: 22/08/2024
-//     -- Update date: 
-//     -- Description:	
-//     -- Update:      
+/*
+    -- Author:	Luis Melendez
+    -- Create date: 22/08/2024
+    -- Update date: 
+    -- Description:	
+    -- Update:      
                     
-// */
+*/
 
 
 const sql = require('mssql');
