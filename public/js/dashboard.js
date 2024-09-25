@@ -175,7 +175,7 @@ $(function() {
         socket.emit('depto', depto);
 
         socket.on('InformacionInicial', (data) => {
-            console.log(data.result)
+            console.log(data)
             // Datos para cada tabla
             // const dataG = data.grupos || [];
             // const dataA = data.alumnos || [];
