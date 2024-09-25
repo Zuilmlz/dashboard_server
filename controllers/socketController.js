@@ -7,6 +7,8 @@
                     
 // */
 
+const test = require('../config/config');
+
 
 // const sqlService = require('../services/sqlService');
 // const EventEmitter = require('events');
@@ -17,46 +19,50 @@
 // const ultimoAlumnoId = {};
 // const ultimoInscritoId = {};
 
-// function configSocket(io) {
+function configSocket(io) {
 
-//   io.on('connection', (socket) => {
-//         console.log('Cliente conectado:', socket.id);
+  io.on('connection', (socket) => {
+        console.log('Cliente conectado:', socket.id);
 
-//         socket.on('depto', async (depto) => {
-//             console.log('Departamento recibido:', depto);
-//             deptoSockets[socket.id] = depto;
+        socket.on('depto', async (depto) => {
 
-//             try {
-//                 const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
+            const result = await test.testConnection();
+            console.log(result)
 
-//                 if (result && result[0]) {
-//                     const jsonData = result[0];
-//                     const grupos = jsonData.Grupos ? JSON.parse(jsonData.Grupos) : [];
-//                     const alumnos = jsonData.Alumnos ? JSON.parse(jsonData.Alumnos) : [];
-//                     const inscritos = jsonData.Inscritos ? JSON.parse(jsonData.Inscritos) : [];
-//                     const totales = jsonData.Totales ? JSON.parse(jsonData.Totales) : [];
+        //     console.log('Departamento recibido:', depto);
+        //     deptoSockets[socket.id] = depto;
 
-//                     socket.emit('InformacionInicial', {
-//                         grupos,
-//                         alumnos,
-//                         inscritos,
-//                         totales
-//                     });
-//                 }
-//             } catch (err) {
-//                 console.error('Error al cargar los datos iniciales:', err);
-//             }
+        //     try {
+        //         const result = await sqlService.executeStoredProcedure('dbo.usp_dashboard_datosIniciales_GetByDepto', { sp_depto: depto });
 
-//             ultimoDeptoId[depto] = 0;
-//             ultimoAlumnoId[depto] = 0;
-//             ultimoInscritoId[depto] = 0;
-//         });
+        //         if (result && result[0]) {
+        //             const jsonData = result[0];
+        //             const grupos = jsonData.Grupos ? JSON.parse(jsonData.Grupos) : [];
+        //             const alumnos = jsonData.Alumnos ? JSON.parse(jsonData.Alumnos) : [];
+        //             const inscritos = jsonData.Inscritos ? JSON.parse(jsonData.Inscritos) : [];
+        //             const totales = jsonData.Totales ? JSON.parse(jsonData.Totales) : [];
 
-//         socket.on('disconnect', () => {
-//             console.log('Cliente desconectado:', socket.id);
-//             delete deptoSockets[socket.id];
-//         });
-//   });
+        //             socket.emit('InformacionInicial', {
+        //                 grupos,
+        //                 alumnos,
+        //                 inscritos,
+        //                 totales
+        //             });
+        //         }
+        //     } catch (err) {
+        //         console.error('Error al cargar los datos iniciales:', err);
+        //     }
+
+        //     ultimoDeptoId[depto] = 0;
+        //     ultimoAlumnoId[depto] = 0;
+        //     ultimoInscritoId[depto] = 0;
+        });
+
+        // socket.on('disconnect', () => {
+        //     console.log('Cliente desconectado:', socket.id);
+        //     delete deptoSockets[socket.id];
+        // });
+  });
 
 
 //   /**
@@ -102,6 +108,6 @@
 //   listenForMessages('InsertAlumnoQueue', 'nuevoRegistroAlumno');
 //   listenForMessages('InsertInscritoQueue', 'nuevoRegistroInscrito');
 
-// }
+}
 
-// module.exports = configSocket;
+module.exports = configSocket;

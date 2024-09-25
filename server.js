@@ -32,7 +32,7 @@ app.use('/libs', express.static(path.join(__dirname, 'public/libs')));
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
 // Pasar la instancia de `io` al controlador de socket
-// setupSocket(io);
+setupSocket(io);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

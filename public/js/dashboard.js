@@ -172,7 +172,7 @@ $(function() {
             confirmButtonText: 'Aceptar'
         });
     } else {
-        // socket.emit('depto', depto);
+        socket.emit('depto', depto);
 
         // socket.on('InformacionInicial', (data) => {
         //     // Datos para cada tabla
