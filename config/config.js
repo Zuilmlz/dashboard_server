@@ -16,6 +16,7 @@ console.log(process.env.DB_DOMAIN)
 const config = {
   
   server: process.env.DB_SERVER,
+  port: 1433,
   authentication: {
     type: "ntlm",
     options: {
