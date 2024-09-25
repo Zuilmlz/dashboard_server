@@ -25,9 +25,9 @@ const config = {
   },
   options: {
     database: process.env.DB_NAME,
-    encrypt: false,
+    encrypt: true,
     trustServerCertificate: true,
-    connectionTimeout: 30000, // 30 segundos para la conexión
+    connectionTimeout: 60000, // Aumenta el timeout a 60 segundos
     requestTimeout: 60000, // 60 segundos para la consulta
   },
 };
