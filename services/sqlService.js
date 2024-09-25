@@ -21,7 +21,7 @@ async function testConnection() {
   } catch (err) {
     return console.error('Error al conectar a SQL Server:', err);
   } finally {
-    await pool.close();
+    
   }
 }
 
